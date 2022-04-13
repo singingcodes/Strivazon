@@ -31,12 +31,20 @@ const displayProducts = async() =>{
         }).then(response=>response.json())
         .then(products=> {
             console.log(products)
-        let productItem = document.getElementById("products")
+        let productItem = document.querySelector(".products")
         products.forEach(item => {
             productItem.innerHTML += `
-            
-            <li class="list-group-item d-flex justify-content-between">
-            <span>${item.brand}</span> <span><strong>€ ${item.price}</strong></span></li>`
+            <div class= "col-3">
+            <div class="card mb-3" >
+        <img src="${item.imageUrl}" class="card-img-top" alt="${item.name}">
+        <div class="card-body">
+            <h5 class="card-title">${item.brand}</h5>
+            <p class="card-text">${item.description}.</p>
+            <a href="#" class="btn btn-outline-primary">€${item.price}</a>
+        </div>
+        </div>
+        </div>
+            `
         });
         })
         .catch(err => console.log(err))
