@@ -38,7 +38,7 @@
 
     <div class="container mt-4">
         <h3 class="text-center">Products Available</h3>
-        <div class="row d-flex products">
+        <div class="row d-flex" id="productsId">
 
 
         </div>
@@ -51,7 +51,49 @@
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
         crossorigin="anonymous"></script>
 
-    <script src="./index.js"></script>
+    <script>
+        const id = new URLSearchParams(window.location.search).get("ProductId")
+        const url = id ? "https://striveschool-api.herokuapp.com/api/product/" + id : "https://striveschool-api.herokuapp.com/api/product/"
+        const displayProducts = async () => {
+            try {
+
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2YmQxY2E5MDIzOTAwMTVkOTY1YzciLCJpYXQiOjE2NDk4NTE2NzcsImV4cCI6MTY1MTA2MTI3N30.vQNUcd502n11trxsE51poL09iufcBbRkpz7Y7Ojq7l0"
+                    }
+                })
+
+                if (response.ok) {
+                    const products = await response.json()
+                    let productItem = document.querySelector("#productsId")
+                    productItem.innerHTML = ""
+                    products.forEach(item => {
+                        productItem.innerHTML += `<div class= "col-3">
+                 <div class="card mb-3" >
+             <img src="${item.imageUrl}" class="card-img-top" alt="${item.name}">
+             <div class="card-body">
+                 <h5 class="card-title">${item.brand}</h5>
+                 <p class="card-text">${item.description}.</p>
+                 <p class="card-text">€${item.price}.</p>
+                 <a href="./detail.html?ProductId=${item._id}" class="btn btn-outline-success">View Product</a>
+                 <button class= "btn float-right" onclick="handleDelete()">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#DA4567" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                    </svg></button>
+             </div>
+             </div>
+             </div> `
+                    });
+                }
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+        displayProducts()
+    </script>
 </body>
 
 </html>
